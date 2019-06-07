@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="date" content="2019-06-07" />
+
+<title>1 - Extract Publication Data</title>
+
+<script>$(document).ready(function(){
+    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    if ($('[data-toggle="popover"]').popover === 'function') {
+        $('[data-toggle="popover"]').popover();
+    }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">1 - Extract Publication Data</h1>
+<h4 class="date"><em>2019-06-07</em></h4>
+
+
+
+<p>Keeping accurate and up-to-date information regarding the output from an author / research group can be a time consuming task, however remains essential in order to evaluate the research impact. There are multiple respositories on-line such as PubMed or CrossRef which store this information, and can already be accessed using an API in R in order to extract this data on an automatic basis.</p>
+<p>There are an excellent packages that already exist to access this data - <a href="https://cran.r-project.org/web/packages/RISmed/RISmed.pdf">RISmed</a> for PubMed and <a href="https://github.com/ropensci/rcrossref">rcrossref</a> for CrossRef. While these provide a vast quantity of useful information, this is often outwith a dataframe/tibble format and so requires a significant quantity of post-processing to otherwise achieve an easily usable output.</p>
+<div id="extract-data" class="section level2">
+<h2>1. Extract Data</h2>
+<p>The functions <code>extract_pmid()</code> (PubMed) and <code>extract_doi()</code> (CrossRef) use unique identifiers to extract important information regarding publications. This can be used for the purposes of citation, cataloguing publications, or for further evalauation of impact (see <strong>ImpactR: Publications 2: Impact</strong>).</p>
+<p>However, it should be noted that the information extracted is dependent on the accuracy and completeness of the information within these repositories. Therefore, some additional editing may be required to remove heterogenity / make corrections / supply missing data.</p>
+</div>
+<div id="extract_pmid" class="section level2">
+<h2><strong><code>extract_pmid()</code></strong></h2>
+<p>The <code>extract_pmid()</code> function only requires a vector/list of PubMed identification numbers, and uses the <a href="https://cran.r-project.org/web/packages/RISmed/RISmed.pdf">RISmed</a> package to extract publication information.</p>
+<p>The function will automatically extract the authors (<code>auth_group</code>, <code>auth_n</code>, <code>authors</code>), and the associated almetric score (<code>altmetric</code>). However, this functionality has been made optional as it can extend the run time of the function (particularly in the case of a large number of authors).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Example output from user_roles_n()</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">out_pubmed &lt;-<span class="st"> </span><span class="kw">extract_pmid</span>(<span class="dt">pmid =</span> <span class="kw">c</span>(<span class="dv">26769786</span>, <span class="dv">26195471</span>, <span class="dv">30513129</span>),</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">                            <span class="dt">get_auth =</span> <span class="ot">TRUE</span>, <span class="dt">get_almetric =</span> <span class="ot">FALSE</span>, <span class="dt">get_impact =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:1000; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+pmid
+</th>
+<th style="text-align:left;">
+author_group
+</th>
+<th style="text-align:left;">
+type
+</th>
+<th style="text-align:left;">
+title
+</th>
+<th style="text-align:right;">
+year
+</th>
+<th style="text-align:left;">
+journal_full
+</th>
+<th style="text-align:left;">
+journal_abbr
+</th>
+<th style="text-align:left;">
+volume
+</th>
+<th style="text-align:left;">
+issue
+</th>
+<th style="text-align:left;">
+pages
+</th>
+<th style="text-align:left;">
+doi
+</th>
+<th style="text-align:left;">
+journal_issn
+</th>
+<th style="text-align:right;">
+cite_pm
+</th>
+<th style="text-align:right;">
+auth_n
+</th>
+<th style="text-align:left;">
+author
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+30513129
+</td>
+<td style="text-align:left;">
+STARSurg Collaborative
+</td>
+<td style="text-align:left;">
+Paper
+</td>
+<td style="text-align:left;min-width: 6in; ">
+Prognostic model to predict postoperative acute kidney injury in patients undergoing major gastrointestinal surgery based on a national prospective observational cohort study.
+</td>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:left;">
+BJS open
+</td>
+<td style="text-align:left;">
+BJS Open
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+400-410
+</td>
+<td style="text-align:left;">
+10.1002/bjs5.86
+</td>
+<td style="text-align:left;">
+2474-9842
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1784
+</td>
+<td style="text-align:left;min-width: 6in; ">
+Nepogodiev D, Walker K, Glasbey JC, Drake TM, Bora…
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+26769786
+</td>
+<td style="text-align:left;">
+STARSurg Collaborative
+</td>
+<td style="text-align:left;">
+Paper
+</td>
+<td style="text-align:left;min-width: 6in; ">
+Outcomes After Kidney injury in Surgery (OAKS): protocol for a multicentre, observational cohort study of acute kidney injury following major gastrointestinal and liver surgery.
+</td>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:left;">
+BMJ open
+</td>
+<td style="text-align:left;">
+BMJ Open
+</td>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+e009812
+</td>
+<td style="text-align:left;">
+10.1136/bmjopen-2015-009812
+</td>
+<td style="text-align:left;">
+2044-6055
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:left;min-width: 6in; ">
+Bath M, Glasbey J, Claireaux H, Drake T, Gundogan …
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+26195471
+</td>
+<td style="text-align:left;">
+STARSurg Collaborative
+</td>
+<td style="text-align:left;">
+Paper
+</td>
+<td style="text-align:left;min-width: 6in; ">
+Determining Surgical Complications in the Overweight (DISCOVER): a multicentre observational cohort study to evaluate the role of obesity as a risk factor for postoperative complications in general surgery.
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+BMJ open
+</td>
+<td style="text-align:left;">
+BMJ Open
+</td>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+e008811
+</td>
+<td style="text-align:left;">
+10.1136/bmjopen-2015-008811
+</td>
+<td style="text-align:left;">
+2044-6055
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;min-width: 6in; ">
+Nepogodiev D, Chapman SJ, Glasbey J, Kelly M, Khat…
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In general, it appears that the information on PubMed tends to be the most accurate/up-to-date, however the Digital Object Identifier (DOI) occationally is not updated to reflect the final DOI for the paper (this can either be amended or the publisher contacted to correct).</p>
+</div>
+<div id="extract_doi" class="section level2">
+<h2><strong><code>extract_doi()</code></strong></h2>
+<p>The <code>extract_doi()</code> function only requires a vector/list of Digital Object Identifiers (DOI), and uses the <a href="https://github.com/ropensci/rcrossref">rcrossref</a> package to extract publication information.</p>
+<p>The function will automatically extract the authors (<code>auth_group</code>, <code>auth_n</code>, <code>authors</code>), and the associated almetric score (<code>altmetric</code>). However, this functionality has been made optional as it can extend the run time of the function (particularly in the case of a large number of authors). It should be also noted that crossref tends to record authorship less well (compared to PubMed).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># Example output from user_roles_n()</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">out_doi &lt;-<span class="st"> </span><span class="kw">extract_doi</span>(out_pubmed<span class="op">$</span>doi,</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">                       <span class="dt">get_auth =</span> <span class="ot">TRUE</span>, <span class="dt">get_almetric =</span> <span class="ot">FALSE</span>, <span class="dt">get_impact =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:1000; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+doi
+</th>
+<th style="text-align:left;">
+author_group
+</th>
+<th style="text-align:left;">
+title
+</th>
+<th style="text-align:right;">
+year
+</th>
+<th style="text-align:left;">
+journal_abbr
+</th>
+<th style="text-align:left;">
+volume
+</th>
+<th style="text-align:left;">
+issue
+</th>
+<th style="text-align:left;">
+pages
+</th>
+<th style="text-align:right;">
+cite_cr
+</th>
+<th style="text-align:right;">
+auth_n
+</th>
+<th style="text-align:left;">
+author
+</th>
+<th style="text-align:left;">
+journal_full
+</th>
+<th style="text-align:left;">
+journal_issn
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+10.1002/bjs5.86
+</td>
+<td style="text-align:left;">
+STARSurg Collaborative
+</td>
+<td style="text-align:left;min-width: 6in; ">
+Prognostic model to predict postoperative acute kidney injury in patients undergoing major gastrointestinal surgery based on a national prospective observational cohort study
+</td>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:left;">
+BJS Open
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+400-410
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;min-width: 6in; ">
+NA…
+</td>
+<td style="text-align:left;">
+BJS Open
+</td>
+<td style="text-align:left;">
+2474-9842
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10.1136/bmjopen-2015-009812
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;min-width: 6in; ">
+Outcomes After Kidney injury in Surgery (OAKS): protocol for a multicentre, observational cohort study of acute kidney injury following major gastrointestinal and liver surgery
+</td>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:left;">
+BMJ Open
+</td>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+e009812
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;min-width: 6in; ">
+NA…
+</td>
+<td style="text-align:left;">
+BMJ Open
+</td>
+<td style="text-align:left;">
+2044-6055
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10.1136/bmjopen-2015-008811
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;min-width: 6in; ">
+Determining Surgical Complications in the Overweight (DISCOVER): a multicentre observational cohort study to evaluate the role of obesity as a risk factor for postoperative complications in general surgery
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+BMJ Open
+</td>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+e008811
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;min-width: 6in; ">
+Nepogodiev D, Chapman SJ, Glasbey J, Kelly M, Khat…
+</td>
+<td style="text-align:left;">
+BMJ Open
+</td>
+<td style="text-align:left;">
+2044-6055
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="cite_publication" class="section level2">
+<h2><strong><code>cite_publication()</code></strong></h2>
+<p>The <code>cite_publication()</code> function will accept direct input from both <code>extract_pmid()</code> and <code>extract_doi()</code>, however will also accept other dataframes with the prerequiste columns. The columns can be specified within the function. Other features include:</p>
+<ul>
+<li><p>Highlighting any missing data essential for citation (e.g. author, jounral, etc). The issue, pmid, and doi are considered optional (depending on whether the dataset was generated from <code>extract_pmid()</code> or <code>extract_doi()</code>).</p></li>
+<li><p>Automatically displaying all authors, however the auth_max can be set from 1 to n to add “et al.” for any authors beyond that number.</p></li>
+<li><p>The format can be customised via <code>cite_format</code> to match preferred referencing style (default is as shown below - Vancouver). Note the variable names in the string must exactly match an essential column (e.g. “author” not “Author” or “AUTHOR”)</p></li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">  out_doi <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">   </span><span class="co"># If a single-authorship collaborative publication (e.g. &quot;STARSurg Collaborative&quot;) then display that</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">author =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(author_group)<span class="op">==</span><span class="ot">TRUE</span>, author, author_group)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="st">  </span><span class="kw">cite_publication</span>(<span class="dt">journal =</span> <span class="st">&quot;journal_full&quot;</span>, <span class="dt">max_auth =</span> <span class="dv">10</span>,</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">                   <span class="dt">cite_format =</span> <span class="st">&quot;author. title. journal. year; volume (issue): pages. PMID: pmid. DOI: doi.&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(citation) <span class="op">%&gt;%</span><span class="st"> </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+citation
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+STARSurg Collaborative. Prognostic model to predict postoperative acute kidney injury in patients undergoing major gastrointestinal surgery based on a national prospective observational cohort study. BJS Open. 2018; 2 (6): 400-410. DOI: <a href="http://dx.doi.org/10.1002/bjs5.86" class="uri">http://dx.doi.org/10.1002/bjs5.86</a>.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+[Incomplete citation data: author].
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nepogodiev D, Chapman SJ, Glasbey J, Kelly M, Khatri C, Drake TM, Kong CY, Mitchell H, Harrison EM, Fitzgerald JE, et al. Determining Surgical Complications in the Overweight (DISCOVER): a multicentre observational cohort study to evaluate the role of obesity as a risk factor for postoperative complications in general surgery. BMJ Open. 2015; 5 (7): e008811. DOI: <a href="http://dx.doi.org/10.1136/bmjopen-2015-008811" class="uri">http://dx.doi.org/10.1136/bmjopen-2015-008811</a>.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
