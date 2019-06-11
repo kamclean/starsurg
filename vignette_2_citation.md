@@ -1381,7 +1381,7 @@ statistics or visualisations.
 specific in estimating citation count than Crossref / PubMed
 repositories.
 
-<img src="vignette_2_citation_files/figure-gfm/cite_plot1-1.png" style="display: block; margin: auto;" />
+<img src="cite_plot1-1.png" style="display: block; margin: auto;" />
 
  
 
@@ -1397,7 +1397,7 @@ Journal Impact Factor - any point above the horizontal line (ratio of
 that
 journal.
 
-<img src="vignette_2_citation_files/figure-gfm/journal_plot-1.png" style="display: block; margin: auto;" />
+<img src="journal_plot-1.png" style="display: block; margin: auto;" />
 
  
 
