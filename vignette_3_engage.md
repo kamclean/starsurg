@@ -851,7 +851,7 @@ example$data_upset %>%
   ComplexHeatmap::UpSet(m = ., set_order = c("STARSurg-1", "DISCOVER", "OAKS-1"))
 ```
 
-<img src="vignette_3_engage_files/figure-gfm/impact_auth_upset3-1.png" style="display: block; margin: auto;" />
+<img src="impact_auth_upset3-1.png" style="display: block; margin: auto;" />
 
 ``` r
 example$data_upset %>%
@@ -861,7 +861,7 @@ example$data_upset %>%
                   sets.x.label = "Number of Collaborators")
 ```
 
-<img src="vignette_3_engage_files/figure-gfm/impact_auth_upset3-2.png" style="display: block; margin: auto;" />
+<img src="impact_auth_upset3-2.png" style="display: block; margin: auto;" />
 
  
 
@@ -872,7 +872,7 @@ visualisation of author/collaborator involvement over time (variations
 of [Sankey
 diagrams](https://datavizcatalogue.com/methods/sankey_diagram.html)).
 
-<img src="vignette_3_engage_files/figure-gfm/impact_auth_alluvial-1.png" style="display: block; margin: auto;" />
+<img src="impact_auth_alluvial-1.png" style="display: block; margin: auto;" />
 
  
 
